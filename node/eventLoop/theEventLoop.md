@@ -110,3 +110,30 @@ bar
 ```
 
 Essa é uma grande diferença entre Promises(e Async/Await, que se baseia em promises)e funções assíncronas antigas por meio de setTimeout() ou outras APIs.
+
+## nextTick
+
+O nextTick interage com o event loop de uma maneira especial. Uma parte muito importante para entender o event loop é process.nextTick(). Toda vez que o event loop faz uma full trip chamamos de tick. 
+
+Quando passamos uma função para process.nextTick(), instruímos a engine a chamar essa função no final da operação atual, antes do início do próximo loop tick. 
+
+```js
+process.nextTick(() => {
+    // do something
+})
+```
+
+O event loop está ocupado processando o código da função atual. Quando essa operação terminar, a engine JavaScript executa todas as funções passadas para as chamadas nextTick durante essa operação. 
+É a maneira como podemos dizer a engine JS para processas uma função de forma assíncrona(após a atual)
+, maso mais rápido possível, não colocando na fila. Chamar setTimeout(() => {}, 0) executará a função no próximo tick, muito mais tarde que ao usar nextTick(). Use nextTick() quando quiser garantir que, na próxima iteração do event loop, esse código ja seja executado.
+
+## setImmediate
+
+Quando você deseja executar algum trecho de código de forma assíncrona, mas o mais rápido possível, a opção é usar a função setImmediate (). 
+```js
+setImmediate(() => {
+    //run something
+})
+```
+
+Qualquer função passada como setImmediate é um callback, que é executado na próxima iteração do event loop.     
